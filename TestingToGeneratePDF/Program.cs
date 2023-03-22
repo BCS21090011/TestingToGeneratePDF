@@ -31,10 +31,39 @@ namespace MainProgram
     {
         // Can't use using for these because some methods might be confused.
 
-        public void TestUseIronPdf()
+        public void OpenPdfFile(string pdfFileName, bool prompt = false, bool promptIfError = false)
+        {
+            try
+            {
+                Console.WriteLine("Opening pdf file");
+                Process.Start(pdfFileName);
+                Console.WriteLine("Opened pdf file");
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine("Error occur:\n" + error);
+
+                if ((promptIfError == true) && (prompt == false))
+                {
+                    Console.WriteLine("Press any key to continue:");
+                    Console.ReadLine();
+                }
+            }
+            finally
+            {
+                if (prompt == true)
+                {
+                    Console.WriteLine("Press any key to continue:");
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        public void TestUseIronPdf(bool prompt=false, bool promptIfError=false)
         {
             // Reference: https://ironpdf.com/blog/using-ironpdf/how-to-generate-pdf-asp-net-csharp/
 
+            bool success = false;
             string pdfContent = "<h1>This is a testing to create a pdf file using IronPdf</h1>\n" +
                 "Old classic Hello world!";
             string pdfSaveName = "../../../IronPdf.pdf";
@@ -54,21 +83,31 @@ namespace MainProgram
                 pdf.SaveAs(pdfSaveName);
                 Console.WriteLine("Saved pdf file");
 
+                success = true;
                 Console.WriteLine("IronPdf finished successfully");
             }
             catch (Exception error)
             {
                 Console.WriteLine("Error occur:\n" + error);
 
-                Console.WriteLine("Press any key to continue:");
-                Console.ReadLine();
+                if (promptIfError == true)
+                {
+                    Console.WriteLine("Press any key to continue:");
+                    Console.ReadLine();
+                }
+            }
+
+            if(success == true)
+            {
+                OpenPdfFile(pdfSaveName, prompt, promptIfError);
             }
         }
 
-        public void TestUsePdfSharp()
+        public void TestUsePdfSharp(bool prompt = false, bool promptIfError = false)
         {
             // Reference: https://procodeguide.com/dotnet/create-pdf-file-in-csharp-net/
 
+            bool success = false;
             string pdfContent = "This is a testing using PdfSharp";
             string pdfSaveName = "../../../PdfSharp.pdf";
 
@@ -110,25 +149,31 @@ namespace MainProgram
                 pdf.Save(pdfSaveName);
                 Console.WriteLine("Saved pdf file");
 
-                Console.WriteLine("Opening pdf file");
-                Process.Start(pdfSaveName);
-                Console.WriteLine("Opened pdf file");
-
+                success = true;
                 Console.WriteLine("PdfSharp finished successfully");
             }
             catch (Exception error)
             {
                 Console.WriteLine("Error occur:\n" + error);
 
-                Console.WriteLine("Press any key to continue:");
-                Console.ReadLine();
+                if (promptIfError == true)
+                {
+                    Console.WriteLine("Press any key to continue:");
+                    Console.ReadLine();
+                }
+            }
+
+            if (success == true)
+            {
+                OpenPdfFile(pdfSaveName, prompt, promptIfError);
             }
         }
 
-        public void TestUseSyncfusion()
+        public void TestUseSyncfusion(bool prompt = false, bool promptIfError = false)
         {
             // Reference: https://www.syncfusion.com/kb/5825/how-to-set-the-page-margin-in-a-pdf-using-c-and-vb-net
 
+            bool success = false;
             string pdfContent = "This is a testing using Syncfusion";
             string pdfSaveName = "../../../Syncfusion.pdf";
 
@@ -179,18 +224,23 @@ namespace MainProgram
                 pdf.Close(true);
                 Console.WriteLine("Closed pdf");
 
-                Console.WriteLine("Opening pdf file");
-                Process.Start(pdfSaveName);
-                Console.WriteLine("Opened pdf file");
-
+                success = true;
                 Console.WriteLine("Syncfusion finished successfully");
             }
             catch (Exception error)
             {
                 Console.WriteLine("Error occur:\n" + error);
 
-                Console.WriteLine("Press any key to continue:");
-                Console.ReadLine();
+                if (promptIfError == true)
+                {
+                    Console.WriteLine("Press any key to continue:");
+                    Console.ReadLine();
+                }
+            }
+
+            if (success == true)
+            {
+                OpenPdfFile(pdfSaveName, prompt, promptIfError);
             }
         }
     }
